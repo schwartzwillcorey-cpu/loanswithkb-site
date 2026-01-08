@@ -770,33 +770,52 @@
                 source: 'loanswithkb.com'
             };
 
-            // Submit to n8n webhook
-            fetch('https://n8n.meridian-automations.com/webhook/lead-submission', {
+            // Disable submit button to prevent double submissions
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+
+            // Submit to n8n webhook (Follow Up Boss CRM integration)
+            fetch('https://n8n.meridian-automations.com/webhook/fub-lead-submission', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                mode: 'cors'
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                // Accept any 2xx response as success
+                if (response.ok) {
+                    return response.json().catch(() => ({ ok: true }));
                 }
-                return response.json().catch(() => ({})); // Handle empty response
+                throw new Error(`Server responded with ${response.status}`);
             })
-            .then(() => {
+            .then((data) => {
+                console.log('Form submitted successfully:', data);
+
                 // Show success banner
                 const successBanner = document.getElementById('success-banner');
                 if (successBanner) {
                     successBanner.style.display = 'block';
                     successBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
+
                 // Reset form
                 form.reset();
+
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
             })
             .catch((error) => {
                 console.error('Form submission error:', error);
                 alert('There was an error submitting the form. Please try again or contact us directly.');
+
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
             });
         } else {
             // Scroll to first error
