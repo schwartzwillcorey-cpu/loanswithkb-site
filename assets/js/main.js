@@ -751,13 +751,38 @@
 
         // If all fields are valid, submit the form
         if (isValid) {
-            // Submit form data using fetch for better control
-            const formData = new FormData(form);
+            // Check honeypot field (basic spam protection)
+            const honeypot = form.querySelector('input[name="bot-field"]');
+            if (honeypot && honeypot.value) {
+                console.log('Bot detected');
+                return;
+            }
 
-            fetch('/', {
+            // Get form data
+            const formData = {
+                name: fields.name.value,
+                email: fields.email.value,
+                phone: fields.phone.value,
+                contactMethod: form.querySelector('input[name="contact-method"]:checked')?.value || 'email',
+                loanType: fields.loanType.value || 'Not specified',
+                message: fields.message.value || '',
+                timestamp: new Date().toISOString(),
+                source: 'loanswithkb.com'
+            };
+
+            // Submit to n8n webhook
+            fetch('https://n8n.meridian-automations.com/webhook/lead-submission', {
                 method: 'POST',
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(formData).toString()
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json().catch(() => ({})); // Handle empty response
             })
             .then(() => {
                 // Show success banner
