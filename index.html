@@ -275,29 +275,71 @@
             <h2>Your Path to Homeownership</h2>
             <p class="section-intro">A clear, supportive process from conversation to closing</p>
 
-            <div class="steps-grid">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Discovery Call</h3>
-                    <p>We'll talk through your goals, timeline, and what you're hoping to achieve. This is a relaxed conversation to understand where you are and where you want to go.</p>
+            <div class="stepper-container">
+                <!-- Progress Bar -->
+                <div class="stepper-progress">
+                    <div class="progress-line">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="stepper-dots">
+                        <button class="stepper-dot active" data-step="0" aria-label="Go to step 1">
+                            <span class="dot-number">1</span>
+                        </button>
+                        <button class="stepper-dot" data-step="1" aria-label="Go to step 2">
+                            <span class="dot-number">2</span>
+                        </button>
+                        <button class="stepper-dot" data-step="2" aria-label="Go to step 3">
+                            <span class="dot-number">3</span>
+                        </button>
+                        <button class="stepper-dot" data-step="3" aria-label="Go to step 4">
+                            <span class="dot-number">4</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Organize Your Financial Picture</h3>
-                    <p>I'll help you understand what documentation you'll need and walk you through getting everything in order. No rush, just clear guidance on what matters.</p>
+                <!-- Step Content -->
+                <div class="stepper-content">
+                    <div class="step-panel active" data-panel="0">
+                        <div class="step-header">
+                            <span class="step-badge">Step 1</span>
+                            <h3>Discovery Call</h3>
+                        </div>
+                        <p>We'll talk through your goals, timeline, and what you're hoping to achieve. This is a relaxed conversation to understand where you are and where you want to go.</p>
+                    </div>
+
+                    <div class="step-panel" data-panel="1">
+                        <div class="step-header">
+                            <span class="step-badge">Step 2</span>
+                            <h3>Organize Your Financial Picture</h3>
+                        </div>
+                        <p>I'll help you understand what documentation you'll need and walk you through getting everything in order. No rush, just clear guidance on what matters.</p>
+                    </div>
+
+                    <div class="step-panel" data-panel="2">
+                        <div class="step-header">
+                            <span class="step-badge">Step 3</span>
+                            <h3>Explore Loan Options & Buying Power</h3>
+                        </div>
+                        <p>Together, we'll review the loan programs that fit your situation and clarify what you can comfortably afford. You'll know exactly where you stand.</p>
+                    </div>
+
+                    <div class="step-panel" data-panel="3">
+                        <div class="step-header">
+                            <span class="step-badge">Step 4</span>
+                            <h3>Move Forward with Confidence</h3>
+                        </div>
+                        <p>When you're ready, I'll guide you through the entire process from application to closing. You'll have clarity and support at every stage.</p>
+                    </div>
                 </div>
 
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Explore Loan Options & Buying Power</h3>
-                    <p>Together, we'll review the loan programs that fit your situation and clarify what you can comfortably afford. You'll know exactly where you stand.</p>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h3>Move Forward with Confidence</h3>
-                    <p>When you're ready, I'll guide you through the entire process from application to closing. You'll have clarity and support at every stage.</p>
+                <!-- Navigation Buttons -->
+                <div class="stepper-navigation">
+                    <button class="stepper-btn stepper-prev" disabled>
+                        <span>← Previous</span>
+                    </button>
+                    <button class="stepper-btn stepper-next">
+                        <span>Next Step →</span>
+                    </button>
                 </div>
             </div>
 
@@ -321,7 +363,7 @@
                 </div>
                 <div class="trust-item">
                     <h3>All Loan Types</h3>
-                    <p>FHA, VA, Conventional, Refinance—we've got you covered</p>
+                    <p>FHA, VA, Conventional, Refinance: we've got you covered</p>
                 </div>
                 <div class="trust-item">
                     <h3>No Pressure</h3>
@@ -337,35 +379,48 @@
             <h2>What Clients Say</h2>
             <p class="section-intro">Real experiences from homebuyers who worked with Kelly</p>
 
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"We had no idea what we were doing as first-time buyers, but Kelly walked us through everything step by step. She never made us feel dumb for asking questions and always got back to us the same day. Made the whole thing way less stressful."</p>
-                    <p class="testimonial-author">Sarah & Mike T.</p>
-                    <p class="testimonial-type">First-Time Buyers</p>
+            <div class="testimonials-carousel">
+                <div class="carousel-track">
+                    <div class="testimonial-slide active">
+                        <p class="testimonial-text">"We had no idea what we were doing as first time buyers, but Kelly walked us through everything step by step. She never made us feel dumb for asking questions and always got back to us the same day. Made the whole thing way less stressful."</p>
+                        <p class="testimonial-author">Sarah & Mike T.</p>
+                        <p class="testimonial-type">First Time Buyers</p>
+                    </div>
+
+                    <div class="testimonial-slide">
+                        <p class="testimonial-text">"I talked to three other loan officers before Kelly and they all felt like they were reading from a script. Kelly actually listened to what we needed and gave us real advice. Ended up closing two weeks faster than expected."</p>
+                        <p class="testimonial-author">James R.</p>
+                        <p class="testimonial-type">Home Purchase</p>
+                    </div>
+
+                    <div class="testimonial-slide">
+                        <p class="testimonial-text">"Moving to Texas from California was overwhelming enough without dealing with a complicated mortgage process. Kelly explained everything in normal language and helped us understand the property tax situation before we made an offer."</p>
+                        <p class="testimonial-author">Amanda C.</p>
+                        <p class="testimonial-type">Relocation Purchase</p>
+                    </div>
+
+                    <div class="testimonial-slide">
+                        <p class="testimonial-text">"Refinancing felt like a hassle until Kelly broke down exactly how much we'd save and how long it would take to break even. She was right on the numbers and we're saving about $350 a month now."</p>
+                        <p class="testimonial-author">David M.</p>
+                        <p class="testimonial-type">Refinance</p>
+                    </div>
+
+                    <div class="testimonial-slide">
+                        <p class="testimonial-text">"Kelly knows the VA loan process better than anyone I talked to. She caught a couple things that would have cost me money and made sure I got the best rate possible. Wish I'd found her sooner."</p>
+                        <p class="testimonial-author">Robert J.</p>
+                        <p class="testimonial-type">VA Loan</p>
+                    </div>
                 </div>
 
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"I talked to three other loan officers before Kelly and they all felt like they were reading from a script. Kelly actually listened to what we needed and gave us real advice. Ended up closing two weeks faster than expected."</p>
-                    <p class="testimonial-author">James R.</p>
-                    <p class="testimonial-type">Home Purchase</p>
-                </div>
+                <button class="carousel-btn carousel-prev" aria-label="Previous testimonial">‹</button>
+                <button class="carousel-btn carousel-next" aria-label="Next testimonial">›</button>
 
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"Moving to Texas from California was overwhelming enough without dealing with a complicated mortgage process. Kelly explained everything in normal language and helped us understand the property tax situation before we made an offer."</p>
-                    <p class="testimonial-author">Amanda C.</p>
-                    <p class="testimonial-type">Relocation Purchase</p>
-                </div>
-
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"Refinancing felt like a hassle until Kelly broke down exactly how much we'd save and how long it would take to break even. She was right on the numbers and we're saving about $350 a month now."</p>
-                    <p class="testimonial-author">David M.</p>
-                    <p class="testimonial-type">Refinance</p>
-                </div>
-
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"Kelly knows the VA loan process better than anyone I talked to. She caught a couple things that would have cost me money and made sure I got the best rate possible. Wish I'd found her sooner."</p>
-                    <p class="testimonial-author">Robert J.</p>
-                    <p class="testimonial-type">VA Loan</p>
+                <div class="carousel-dots">
+                    <button class="dot active" aria-label="Go to testimonial 1"></button>
+                    <button class="dot" aria-label="Go to testimonial 2"></button>
+                    <button class="dot" aria-label="Go to testimonial 3"></button>
+                    <button class="dot" aria-label="Go to testimonial 4"></button>
+                    <button class="dot" aria-label="Go to testimonial 5"></button>
                 </div>
             </div>
         </div>
@@ -377,26 +432,85 @@
             <h2>Loan Programs</h2>
             <p class="section-intro">Flexible financing options to match your situation and goals.</p>
 
-            <div class="programs-grid">
-                <div class="program-card">
-                    <h3>Conventional</h3>
-                    <p>Traditional financing with competitive rates and flexible terms. Ideal for buyers with strong credit and stable income.</p>
+            <div class="programs-accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-title">Conventional</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Traditional financing with competitive rates and flexible terms. Ideal for buyers with strong credit and stable income.</p>
+                        <ul>
+                            <li>Down payment as low as 3% for qualified buyers</li>
+                            <li>Competitive interest rates</li>
+                            <li>Flexible loan terms (15, 20, 30 years)</li>
+                            <li>No upfront mortgage insurance with 20% down</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="program-card">
-                    <h3>FHA</h3>
-                    <p>Government-backed loans with lower down payment requirements. A great option for first-time buyers or those rebuilding credit.</p>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-title">FHA</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Government backed loans with lower down payment requirements. A great option for first time buyers or those rebuilding credit.</p>
+                        <ul>
+                            <li>Down payment as low as 3.5%</li>
+                            <li>More flexible credit requirements</li>
+                            <li>Easier qualification for those with limited credit history</li>
+                            <li>Available for primary residences</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="program-card">
-                    <h3>VA</h3>
-                    <p>Exclusive benefit for veterans and active military. Often requires no down payment and offers competitive terms.</p>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-title">VA</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Exclusive benefit for veterans and active military. Often requires no down payment and offers competitive terms.</p>
+                        <ul>
+                            <li>$0 down payment option</li>
+                            <li>No private mortgage insurance required</li>
+                            <li>Competitive interest rates</li>
+                            <li>Available for eligible veterans, active duty, and qualifying spouses</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="program-card">
-                    <h3>Refinance</h3>
-                    <p>Lower your rate, adjust your term, or tap into equity. We'll help you determine if refinancing makes sense for your situation.</p>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-title">Refinance</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Lower your rate, adjust your term, or tap into equity. We'll help you determine if refinancing makes sense for your situation.</p>
+                        <ul>
+                            <li>Rate and term refinance to lower payments</li>
+                            <li>Cash out refinance to access home equity</li>
+                            <li>Shorten loan term to build equity faster</li>
+                            <li>Free refinance analysis and break even calculation</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="program-card">
-                    <h3>First-Time Buyer</h3>
-                    <p>Specialized guidance for your first purchase. We'll walk you through every step and explore programs designed for new buyers.</p>
+
+                <div class="accordion-item">
+                    <button class="accordion-header" aria-expanded="false">
+                        <span class="accordion-title">First Time Buyer</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Specialized guidance for your first purchase. We'll walk you through every step and explore programs designed for new buyers.</p>
+                        <ul>
+                            <li>Lower down payment options</li>
+                            <li>First time buyer grants and assistance programs</li>
+                            <li>Step by step guidance through the entire process</li>
+                            <li>Educational resources and timeline planning</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -553,7 +667,7 @@
                     <!-- Calculator Lead Capture -->
                     <div class="calculator-lead-capture">
                         <h4>Want to discuss these numbers?</h4>
-                        <p>I'll email you this estimate and we can schedule a Discovery Call to explore your options—no pressure, just clarity.</p>
+                        <p>I'll email you this estimate and we can schedule a Discovery Call to explore your options, no pressure, just clarity.</p>
 
                         <form class="lead-capture-form" id="calculator-lead-form" name="calculator-lead" method="POST" data-netlify="true">
                             <input type="hidden" name="form-name" value="calculator-lead">
@@ -581,7 +695,7 @@
         <div class="container">
             <div class="cta-content">
                 <h2>Ready to explore what's possible?</h2>
-                <p>Let's talk through your situation in a quick Discovery Call. We'll review your goals, clarify your options, and map out the best next steps—no pressure, just clear guidance.</p>
+                <p>Let's talk through your situation in a quick Discovery Call. We'll review your goals, clarify your options, and map out the best next steps, no pressure, just clear guidance.</p>
                 <div class="cta-buttons">
                     <a href="contact.html" class="btn btn-primary btn-lg">Schedule a Discovery Call</a>
                     <a href="contact.html" class="btn btn-secondary-outline btn-lg">Learn More About the Process</a>
@@ -689,7 +803,7 @@
         <div class="container">
             <div class="final-cta-content">
                 <h2>Your dream home is closer than you think.</h2>
-                <p>Start with a free Discovery Call. I'll answer your questions, explain your options, and help you understand exactly where you stand—with zero pressure and complete clarity.</p>
+                <p>Start with a free Discovery Call. I'll answer your questions, explain your options, and help you understand exactly where you stand with zero pressure and complete clarity.</p>
                 <div class="final-cta-buttons">
                     <a href="contact.html" class="btn btn-primary btn-lg">Schedule a Discovery Call</a>
                     <a href="contact.html" class="btn btn-secondary-outline btn-lg">Explore Your Options</a>

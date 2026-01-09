@@ -884,6 +884,215 @@
 })();
 
 // ========================================
+// PROGRESSIVE STEPPER
+// ========================================
+(function() {
+    const stepperDots = document.querySelectorAll('.stepper-dot');
+    const stepPanels = document.querySelectorAll('.step-panel');
+    const prevBtn = document.querySelector('.stepper-prev');
+    const nextBtn = document.querySelector('.stepper-next');
+    const progressFill = document.querySelector('.progress-fill');
+
+    if (!stepperDots.length || !stepPanels.length) return;
+
+    let currentStep = 0;
+    const totalSteps = stepPanels.length;
+
+    function updateStepper() {
+        // Update dots
+        stepperDots.forEach((dot, index) => {
+            dot.classList.remove('active', 'completed');
+            if (index === currentStep) {
+                dot.classList.add('active');
+            } else if (index < currentStep) {
+                dot.classList.add('completed');
+            }
+        });
+
+        // Update panels
+        stepPanels.forEach((panel, index) => {
+            panel.classList.remove('active');
+            if (index === currentStep) {
+                panel.classList.add('active');
+            }
+        });
+
+        // Update progress bar
+        const progressPercent = (currentStep / (totalSteps - 1)) * 100;
+        progressFill.style.width = `${progressPercent}%`;
+
+        // Update navigation buttons
+        if (prevBtn) {
+            prevBtn.disabled = currentStep === 0;
+        }
+
+        if (nextBtn) {
+            if (currentStep === totalSteps - 1) {
+                nextBtn.querySelector('span').textContent = 'Get Started →';
+            } else {
+                nextBtn.querySelector('span').textContent = 'Next Step →';
+            }
+        }
+    }
+
+    // Dot navigation
+    stepperDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentStep = index;
+            updateStepper();
+        });
+    });
+
+    // Previous button
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStepper();
+            }
+        });
+    }
+
+    // Next button
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps - 1) {
+                currentStep++;
+                updateStepper();
+            } else {
+                // On last step, scroll to CTA or redirect
+                document.querySelector('.how-it-works-cta')?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        });
+    }
+
+    // Initialize
+    updateStepper();
+})();
+
+// ========================================
+// TESTIMONIALS CAROUSEL
+// ========================================
+(function() {
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const dots = document.querySelectorAll('.carousel-dots .dot');
+    const prevBtn = document.querySelector('.carousel-prev');
+    const nextBtn = document.querySelector('.carousel-next');
+
+    if (!slides.length || !dots.length) return;
+
+    let currentSlide = 0;
+    let autoplayInterval;
+
+    function showSlide(index) {
+        // Hide all slides
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+
+        // Deactivate all dots
+        dots.forEach(dot => {
+            dot.classList.remove('active');
+        });
+
+        // Show current slide and dot
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function startAutoplay() {
+        autoplayInterval = setInterval(nextSlide, 5000); // 5 seconds
+    }
+
+    function stopAutoplay() {
+        clearInterval(autoplayInterval);
+    }
+
+    // Navigation buttons
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            stopAutoplay();
+            startAutoplay();
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            stopAutoplay();
+            startAutoplay();
+        });
+    }
+
+    // Dot navigation
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            showSlide(currentSlide);
+            stopAutoplay();
+            startAutoplay();
+        });
+    });
+
+    // Start autoplay
+    startAutoplay();
+
+    // Pause on hover
+    const carousel = document.querySelector('.testimonials-carousel');
+    if (carousel) {
+        carousel.addEventListener('mouseenter', stopAutoplay);
+        carousel.addEventListener('mouseleave', startAutoplay);
+    }
+})();
+
+// ========================================
+// LOAN PROGRAMS ACCORDION
+// ========================================
+(function() {
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const accordionItem = this.parentElement;
+            const accordionContent = accordionItem.querySelector('.accordion-content');
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+            // Close all other accordions
+            accordionHeaders.forEach(otherHeader => {
+                if (otherHeader !== this) {
+                    otherHeader.setAttribute('aria-expanded', 'false');
+                    const otherContent = otherHeader.parentElement.querySelector('.accordion-content');
+                    otherContent.classList.remove('active');
+                }
+            });
+
+            // Toggle current accordion
+            if (isExpanded) {
+                this.setAttribute('aria-expanded', 'false');
+                accordionContent.classList.remove('active');
+            } else {
+                this.setAttribute('aria-expanded', 'true');
+                accordionContent.classList.add('active');
+            }
+        });
+    });
+})();
+
+// ========================================
 // UTILITIES
 // ========================================
 
