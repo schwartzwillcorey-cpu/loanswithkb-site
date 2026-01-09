@@ -891,8 +891,19 @@
             throw new Error(`Server responded with ${response.status}`);
         })
         .then(() => {
-            // Show success message
-            alert('Thank you! Your estimate has been saved. I\'ll reach out within 24 hours to discuss your numbers and answer any questions.');
+            // Show success banner
+            const successBanner = document.getElementById('calculator-success-banner');
+            if (successBanner) {
+                successBanner.style.display = 'block';
+                successBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Hide the calculator lead capture form
+                const leadCapture = document.querySelector('.calculator-lead-capture');
+                if (leadCapture) {
+                    leadCapture.style.display = 'none';
+                }
+            }
+
             // Reset form
             leadForm.reset();
         })
