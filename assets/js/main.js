@@ -862,17 +862,37 @@
             hiddenFields.monthlyPayment.value = calcOutputs.monthlyPayment.textContent;
         }
 
-        // Submit form via Netlify
+        // Submit to n8n webhook (calculator leads)
         const formData = new FormData(leadForm);
+        const calculatorData = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            homePrice: hiddenFields.homePrice.value,
+            downPayment: hiddenFields.downPayment.value,
+            monthlyPayment: hiddenFields.monthlyPayment.value,
+            timestamp: new Date().toISOString(),
+            source: 'calculator',
+            leadType: 'Calculator Lead'
+        };
 
-        fetch('/', {
+        fetch('https://n8n.meridian-automations.com/webhook/fub-lead-submission', {
             method: 'POST',
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(formData).toString()
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(calculatorData),
+            mode: 'cors'
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json().catch(() => ({ ok: true }));
+            }
+            throw new Error(`Server responded with ${response.status}`);
         })
         .then(() => {
             // Show success message
-            alert('Success! Check your email for your mortgage estimate. I\'ll be in touch within 24 hours to schedule our call.');
+            alert('Thank you! Your estimate has been saved. I\'ll reach out within 24 hours to discuss your numbers and answer any questions.');
             // Reset form
             leadForm.reset();
         })
