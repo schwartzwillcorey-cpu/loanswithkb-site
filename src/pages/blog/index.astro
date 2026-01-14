@@ -1,0 +1,418 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Get all blog posts, filter out drafts, and sort by date (newest first)
+const allPosts = await getCollection('blog');
+const publishedPosts = allPosts
+  .filter(post => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Select featured post: prioritize featured:true, otherwise use most recent
+const featuredPost = publishedPosts.find(post => post.data.featured) || publishedPosts[0];
+
+// Remaining posts (exclude featured post)
+const remainingPosts = publishedPosts.filter(post => post.slug !== featuredPost?.slug);
+
+// Calculate reading time (rough estimate: 200 words per minute)
+function getReadingTime(content: string): number {
+  const words = content.split(/\s+/).length;
+  return Math.ceil(words / 200);
+}
+
+// Format date
+function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Loans with KB Blog",
+  "description": "Expert mortgage guidance, tips, and insights for Dallas-Fort Worth, Tyler, and East Texas homebuyers.",
+  "url": "https://loanswithkb.com/blog",
+  "author": {
+    "@type": "Person",
+    "name": "Kelly Bergman",
+    "jobTitle": "Mortgage Loan Officer",
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "NMLS",
+      "value": "1786042"
+    }
+  }
+};
+---
+
+<BaseLayout
+  title="Mortgage Tips & Insights | Loans with KB Blog"
+  description="Expert mortgage guidance, tips, and insights for Dallas-Fort Worth, Tyler, and East Texas homebuyers from Kelly Bergman (NMLS #1786042)."
+  canonical="https://loanswithkb.com/blog"
+  jsonLd={jsonLd}
+>
+  <!-- Blog Hero -->
+  <section class="page-hero blog-hero-dark" style="padding: var(--spacing-4xl) 0 var(--spacing-3xl);">
+    <div class="container">
+      <h1>Mortgage Insights & Guidance</h1>
+      <p class="hero-subheading">Clear answers to your home financing questions.</p>
+      <div class="hero-cta-row">
+        <a href="/contact.html" class="btn btn-primary">Schedule a Call</a>
+        <a href="/#mortgage-calculator" class="btn btn-secondary-outline">Try Calculator</a>
+      </div>
+    </div>
+  </section>
+
+  {publishedPosts.length === 0 ? (
+    <section style="padding: var(--spacing-5xl) 0;">
+      <div class="container">
+        <div class="content-block centered">
+          <p>No blog posts published yet. Check back soon for expert mortgage insights.</p>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <>
+      <!-- Featured Post -->
+      {featuredPost && (
+        <section class="featured-section">
+          <div class="container">
+            <article class="featured-card">
+              <div class="featured-content">
+                <div class="blog-meta">
+                  <time datetime={featuredPost.data.pubDate.toISOString()}>
+                    {formatDate(featuredPost.data.pubDate)}
+                  </time>
+                  <span class="blog-meta-divider">•</span>
+                  <span>{getReadingTime(featuredPost.body)} min read</span>
+                </div>
+
+                <h2 class="featured-title">
+                  <a href={`/blog/${featuredPost.slug}`}>{featuredPost.data.title}</a>
+                </h2>
+
+                <p class="featured-excerpt">{featuredPost.data.description}</p>
+
+                {featuredPost.data.tags.length > 0 && (
+                  <div class="blog-tags">
+                    {featuredPost.data.tags.map(tag => (
+                      <span class="blog-tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+
+                <a href={`/blog/${featuredPost.slug}`} class="blog-read-more featured-read-more">
+                  Read Article →
+                </a>
+              </div>
+            </article>
+          </div>
+        </section>
+      )}
+
+      <!-- More Articles Section -->
+      {remainingPosts.length > 0 && (
+        <section class="more-articles-section">
+          <div class="container">
+            <h2 class="section-heading">More Articles</h2>
+
+            <div class="blog-grid">
+              {remainingPosts.map((post) => {
+                const readingTime = getReadingTime(post.body);
+
+                return (
+                  <article class="blog-card">
+                    <div class="blog-card-content">
+                      <div class="blog-meta">
+                        <time datetime={post.data.pubDate.toISOString()}>
+                          {formatDate(post.data.pubDate)}
+                        </time>
+                        <span class="blog-meta-divider">•</span>
+                        <span>{readingTime} min read</span>
+                      </div>
+
+                      <h3 class="blog-card-title">
+                        <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                      </h3>
+
+                      <p class="blog-card-excerpt">{post.data.description}</p>
+
+                      {post.data.tags.length > 0 && (
+                        <div class="blog-tags">
+                          {post.data.tags.map(tag => (
+                            <span class="blog-tag">{tag}</span>
+                          ))}
+                        </div>
+                      )}
+
+                      <a href={`/blog/${post.slug}`} class="blog-read-more">
+                        Read Article →
+                      </a>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+    </>
+  )}
+
+  <!-- CTA Section -->
+  <section class="final-cta">
+    <div class="container">
+      <div class="final-cta-content">
+        <h2>Ready to explore your mortgage options?</h2>
+        <p>Schedule a free Discovery Call. I'll answer your questions, explain your options, and help you understand exactly where you stand with zero pressure and complete clarity.</p>
+        <div class="final-cta-buttons">
+          <a href="/contact.html" class="btn btn-primary btn-lg">Schedule a Discovery Call</a>
+          <a href="/#mortgage-calculator" class="btn btn-secondary-outline btn-lg">Try the Calculator</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Blog Hero Dark Background */
+  .blog-hero-dark {
+    background: #0A0A0A;
+    color: var(--color-white);
+  }
+
+  .blog-hero-dark h1 {
+    color: var(--color-white);
+  }
+
+  .blog-hero-dark .hero-subheading {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Hero CTA Row */
+  .hero-cta-row {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Featured Post Section */
+  .featured-section {
+    padding: var(--spacing-4xl) 0;
+    background: var(--color-soft-gray);
+  }
+
+  .featured-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-3xl);
+    transition: var(--transition-smooth);
+  }
+
+  .featured-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-xl);
+  }
+
+  .featured-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .featured-title {
+    font-size: 2rem;
+    line-height: 1.25;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-accent);
+  }
+
+  .featured-title a {
+    color: var(--color-primary);
+    transition: var(--transition-base);
+  }
+
+  .featured-title a:hover {
+    color: var(--color-accent);
+  }
+
+  .featured-excerpt {
+    font-size: 1.125rem;
+    color: var(--color-text-gray);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .featured-read-more {
+    font-size: 1.0625rem;
+  }
+
+  /* More Articles Section */
+  .more-articles-section {
+    padding: var(--spacing-5xl) 0;
+  }
+
+  .section-heading {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: var(--spacing-3xl);
+    color: var(--color-primary);
+    position: relative;
+    padding-bottom: var(--spacing-md);
+  }
+
+  .section-heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+  }
+
+  /* Blog Grid (2 columns on desktop) */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-2xl);
+    max-width: var(--container-max);
+    margin: 0 auto;
+  }
+
+  .blog-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    transition: var(--transition-smooth);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+  }
+
+  .blog-card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .blog-meta-divider {
+    color: var(--color-border);
+  }
+
+  .blog-card-title {
+    font-size: 1.375rem;
+    line-height: 1.3;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-accent);
+  }
+
+  .blog-card-title a {
+    color: var(--color-primary);
+    transition: var(--transition-base);
+  }
+
+  .blog-card-title a:hover {
+    color: var(--color-accent);
+  }
+
+  .blog-card-excerpt {
+    color: var(--color-text-gray);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-lg);
+    flex-grow: 1;
+  }
+
+  .blog-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .blog-tag {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: var(--color-soft-gray);
+    color: var(--color-text-gray);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition-base);
+    cursor: default;
+  }
+
+  .blog-tag:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: rgba(255, 62, 165, 0.05);
+  }
+
+  .blog-read-more {
+    color: var(--color-accent);
+    font-weight: var(--font-weight-semibold);
+    transition: var(--transition-base);
+    align-self: flex-start;
+  }
+
+  .blog-read-more:hover {
+    color: var(--color-accent-hover);
+    transform: translateX(4px);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .featured-card {
+      padding: var(--spacing-2xl);
+    }
+
+    .featured-title {
+      font-size: 1.75rem;
+    }
+
+    .featured-excerpt {
+      font-size: 1rem;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-xl);
+    }
+
+    .blog-card {
+      padding: var(--spacing-xl);
+    }
+
+    .section-heading {
+      font-size: 1.75rem;
+    }
+  }
+</style>

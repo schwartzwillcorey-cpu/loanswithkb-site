@@ -1,0 +1,39 @@
+---
+const { currentPath = '/' } = Astro.props;
+
+const isActive = (path: string) => {
+  if (path === '/' || path === '/index.html') {
+    return currentPath === '/' || currentPath === '/index.html';
+  }
+  return currentPath.startsWith(path);
+};
+---
+
+<header class="site-header" id="site-header">
+    <div class="container">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <img src="/assets/img/kelly-bergman-logo.png" alt="Loans with KB">
+            </a>
+
+            <nav class="main-nav" id="main-nav">
+                <ul>
+                    <li><a href="/" class={isActive('/') && !currentPath.startsWith('/blog') ? 'active' : ''}>Home</a></li>
+                    <li><a href="/about.html" class={isActive('/about') ? 'active' : ''}>About</a></li>
+                    <li><a href="/blog" class={isActive('/blog') ? 'active' : ''}>Blog</a></li>
+                    <li><a href="/#mortgage-calculator">Calculator</a></li>
+                    <li><a href="/#faq">FAQ</a></li>
+                    <li><a href="/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+
+            <a href="/contact.html" class="btn btn-primary">Schedule Call</a>
+
+            <button class="hamburger" id="hamburger" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,91 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+  jsonLd?: object;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = 'https://loanswithkb.com/assets/img/kelly-headshot.jpg',
+  ogType = 'website',
+  noindex = false,
+  jsonLd
+} = Astro.props;
+
+const GA_ID = import.meta.env.PUBLIC_GA_ID;
+const currentPath = Astro.url.pathname;
+const fullUrl = canonical || `https://loanswithkb.com${currentPath}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    {GA_ID && (
+        <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+            <script define:vars={{ GA_ID }}>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', GA_ID);
+            </script>
+        </>
+    )}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="canonical" href={fullUrl}>
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+
+    {noindex && <meta name="robots" content="noindex,nofollow">}
+    {!noindex && <meta name="robots" content="index, follow">}
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType}>
+    <meta property="og:url" content={fullUrl}>
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content={ogImage}>
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content={fullUrl}>
+    <meta property="twitter:title" content={title}>
+    <meta property="twitter:description" content={description}>
+    <meta property="twitter:image" content={ogImage}>
+
+    <!-- Geo Location -->
+    <meta name="geo.region" content="US-TX">
+    <meta name="geo.placename" content="Dallas-Fort Worth, Tyler, Rockwall, Heath, Forney, East Texas">
+    <meta name="geo.position" content="32.7767;-96.7970">
+    <meta name="ICBM" content="32.7767, -96.7970">
+
+    {jsonLd && (
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
+
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+    <Header currentPath={currentPath} />
+
+    <slot />
+
+    <Footer />
+
+    <script is:inline src="/assets/js/main.js"></script>
+</body>
+</html>
