@@ -5,7 +5,7 @@ pubDate: 2026-01-21
 author: "Kelly Bergman"
 tags: ["Texas","Mortgage Lending","Homebuyers"]
 draft: false
-featured: false
+featured: true
 ---
 
 # Step-by-Step Checklist for Texas Homebuyers to Prepare for the Mortgage Process in DFW
