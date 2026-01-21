@@ -6,7 +6,7 @@ pubDate: 2024-12-20
 author: "Kelly Bergman"
 tags: ["Texas", "Property Taxes", "Homeowners", "DFW"]
 draft: false
-featured: true
+featured: false
 ---
 
 Texas is a popular destination for homebuyers—no state income tax, strong job market, and a relatively affordable cost of living. But there are some Texas-specific costs and considerations you should understand before buying. This guide breaks down property taxes, MUD districts, and hidden costs unique to Texas homeownership.
