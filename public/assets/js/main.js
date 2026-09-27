@@ -95,160 +95,6 @@
 })();
 
 // ========================================
-// CONTACT FORM VALIDATION
-// ========================================
-(function initFormValidation() {
-    const form = document.getElementById('contact-form');
-    if (!form) return;
-
-    // Email validation regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // Phone validation regex (flexible format)
-    const phoneRegex = /^[\d\s\-\(\)\.]+$/;
-
-    // Validation functions
-    const validators = {
-        name: (value) => {
-            if (!value.trim()) {
-                return 'Name is required';
-            }
-            if (value.trim().length < 2) {
-                return 'Name must be at least 2 characters';
-            }
-            return '';
-        },
-
-        email: (value) => {
-            if (!value.trim()) {
-                return 'Email is required';
-            }
-            if (!emailRegex.test(value)) {
-                return 'Please enter a valid email address';
-            }
-            return '';
-        },
-
-        phone: (value) => {
-            if (!value.trim()) {
-                return 'Phone number is required';
-            }
-            if (!phoneRegex.test(value) || value.replace(/\D/g, '').length < 10) {
-                return 'Please enter a valid phone number';
-            }
-            return '';
-        },
-
-        'loan-type': (value) => {
-            if (!value) {
-                return 'Please select a loan type';
-            }
-            return '';
-        },
-
-        message: (value) => {
-            if (!value.trim()) {
-                return 'Message is required';
-            }
-            if (value.trim().length < 10) {
-                return 'Message must be at least 10 characters';
-            }
-            return '';
-        }
-    };
-
-    // Show error message
-    function showError(fieldId, message) {
-        const errorElement = document.getElementById(`${fieldId}-error`);
-        const field = document.getElementById(fieldId);
-
-        if (errorElement) {
-            errorElement.textContent = message;
-        }
-
-        if (field) {
-            field.setAttribute('aria-invalid', 'true');
-        }
-    }
-
-    // Clear error message
-    function clearError(fieldId) {
-        const errorElement = document.getElementById(`${fieldId}-error`);
-        const field = document.getElementById(fieldId);
-
-        if (errorElement) {
-            errorElement.textContent = '';
-        }
-
-        if (field) {
-            field.setAttribute('aria-invalid', 'false');
-        }
-    }
-
-    // Validate field
-    function validateField(fieldId) {
-        const field = document.getElementById(fieldId);
-        if (!field) return true;
-
-        const value = field.value;
-        const validator = validators[fieldId];
-
-        if (!validator) return true;
-
-        const errorMessage = validator(value);
-
-        if (errorMessage) {
-            showError(fieldId, errorMessage);
-            return false;
-        } else {
-            clearError(fieldId);
-            return true;
-        }
-    }
-
-    // Add real-time validation on blur
-    Object.keys(validators).forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field) {
-            field.addEventListener('blur', () => validateField(fieldId));
-
-            // Clear error on input
-            field.addEventListener('input', () => {
-                if (document.getElementById(`${fieldId}-error`).textContent) {
-                    validateField(fieldId);
-                }
-            });
-        }
-    });
-
-    // Form submission
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        // Validate all fields
-        let isValid = true;
-        Object.keys(validators).forEach(fieldId => {
-            if (!validateField(fieldId)) {
-                isValid = false;
-            }
-        });
-
-        if (!isValid) {
-            // Focus first error field
-            const firstError = form.querySelector('[aria-invalid="true"]');
-            if (firstError) {
-                firstError.focus();
-            }
-            return;
-        }
-
-        // If valid, submit the form
-        // Netlify will handle the submission via its form detection
-        form.submit();
-    });
-})();
-
-// ========================================
 // SUCCESS BANNER DISPLAY
 // ========================================
 (function initSuccessBanner() {
@@ -1016,7 +862,8 @@
     if (!slides.length || !dots.length) return;
 
     let currentSlide = 0;
-    let autoplayInterval;
+    let autoplayTimeout;
+    const SLIDE_DURATION_MS = 20000;
 
     function showSlide(index) {
         // Hide all slides
@@ -1045,11 +892,14 @@
     }
 
     function startAutoplay() {
-        autoplayInterval = setInterval(nextSlide, 5000); // 5 seconds
+        autoplayTimeout = setTimeout(() => {
+            nextSlide();
+            startAutoplay();
+        }, SLIDE_DURATION_MS);
     }
 
     function stopAutoplay() {
-        clearInterval(autoplayInterval);
+        clearTimeout(autoplayTimeout);
     }
 
     // Navigation buttons

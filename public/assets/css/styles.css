@@ -581,6 +581,15 @@ section {
     line-height: 1;
 }
 
+.testimonial-rating {
+    color: var(--color-accent);
+    font-size: 1.25rem;
+    letter-spacing: 0.15em;
+    margin-bottom: var(--spacing-md);
+    position: relative;
+    z-index: 1;
+}
+
 .testimonial-text {
     font-size: 1.125rem;
     line-height: 1.7;
@@ -648,6 +657,10 @@ section {
     justify-content: center;
     gap: var(--spacing-sm);
     margin-top: var(--spacing-xl);
+}
+
+.testimonials-cta {
+    margin-top: var(--spacing-2xl);
 }
 
 .dot {
@@ -1318,7 +1331,7 @@ select:focus {
 .stepper-dot {
     width: 48px;
     height: 48px;
-    background: rgba(255, 255, 255, 0.15);
+    background: #1A1A1A;
     border: 3px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     display: flex;
@@ -1328,20 +1341,6 @@ select:focus {
     transition: var(--transition-smooth);
     padding: 0;
     position: relative;
-}
-
-.stepper-dot:not(:last-child)::after {
-    content: "→";
-    position: absolute;
-    left: calc(100% + 8px);
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 1.25rem;
-    font-weight: var(--font-weight-bold);
-    pointer-events: none;
-    width: calc(100vw / 4 - 60px);
-    text-align: center;
 }
 
 .stepper-dot:hover {
@@ -1486,10 +1485,6 @@ select:focus {
     .stepper-dot {
         width: 40px;
         height: 40px;
-    }
-
-    .stepper-dot:not(:last-child)::after {
-        font-size: 1rem;
     }
 
     .dot-number {
